@@ -10,4 +10,4 @@ node_modules/
 
 #クレデンシャル情報
 credentials.json
-service-account.json
+serviceAccountKey.json
