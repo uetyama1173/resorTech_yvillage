@@ -357,6 +357,7 @@ async function createCarouselTemplate(spot_obj: any) {
 
   //カルーセルのテンプレートメッセージを作成して，
   const columns = spotsData.map(spot => {
+    console.log("観光地名", spot.id)
     return {
       thumbnailImageUrl: spot.img_url,
       title: spot.id,
@@ -365,7 +366,7 @@ async function createCarouselTemplate(spot_obj: any) {
         {
           type: "uri",
           label: "詳細",
-          uri: `https://uetyama1173.github.io/test_resorTech_HTML/index_template.html?img_url=${spot.img_url}&land_name=${encodeURIComponent(spot.land_name)}&address=${encodeURIComponent(spot.address)}&closed_day=${encodeURIComponent(spot.closed_day)}&officiallink=${spot.officiallink}&businessday=${encodeURIComponent(spot.businessday)}`
+          uri: `https://resortech-6d2a7.web.app/?id=${encodeURIComponent(spot.id)}`
         }
       ]
     };
