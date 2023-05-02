@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "target": "es2017",
+    "esModuleInterop": true,
   },
   "compileOnSave": true,
   "include": [
