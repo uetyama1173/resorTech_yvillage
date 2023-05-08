@@ -1,0 +1,65 @@
+firestoreに関する機能作成
+
+パターン1
+//userid 初期化
+await db.collection('users').doc(getUserId).set({ answer: { ans_1: 0, ans_2: 0, ans_3: 0 }, question_id: { que_1: 0, que_2: 0, que_3: 0 } });
+
+パターン2
+//質問IDをusesテーブルへ
+let getQuestionId = await getRandomUnaskedQuestion(getUserId)
+let docRef: any = db.collection('users').doc(getUserId)
+docRef.update({
+question_id: {
+	que_1: Number(getQuestionId)
+}
+});
+	
+パターン3
+const docRef: any = db.collection('users').doc(getUserId);
+//現在のデータを取得し、回答と次の質問IDを一度に更新
+const userData = (await docRef.get()).data();
+const updatedAnswer = { ...userData.answer, ans_3: Number(event.postback.data) };
+await docRef.update({
+	answer: updatedAnswer,
+});
+
+パターン4
+//回答をusersテーブルへ
+const docRef: any = db.collection('users').doc(getUserId);
+//次の質問を送信する
+const getQuestionId = await getRandomUnaskedQuestion(getUserId);
+//現在のデータを取得し、回答と次の質問IDを一度に更新
+const userData = (await docRef.get()).data();
+const updatedAnswer = { ...userData.answer, ans_2: Number(event.postback.data) };
+const updatedQuestionId = { ...userData.question_id, que_3: Number(getQuestionId) };
+await docRef.update({
+	answer: updatedAnswer,
+	question_id: updatedQuestionId
+});
+
+パターン5.
+//userテーブル参照
+const docRef: any = db.collection('users').doc(getUserId);
+//次の質問を送信する
+const getQuestionId = await getRandomUnaskedQuestion(getUserId);
+//現在のデータを取得し、回答と次の質問IDを一度に更新
+const userData = (await docRef.get()).data();
+const updatedQuestionId = { ...userData.question_id, que_2: Number(getQuestionId) };
+await docRef.update({
+	answer: {
+	ans_1: Number(event.postback.data)
+	},
+	question_id: updatedQuestionId
+});
+
+パターン6
+//usersコレクションのquestion_idを取得する
+const docRef = db.collection('users').doc(userid)
+const docSnapshot = await docRef.get();
+const data: any = docSnapshot.data()
+const User_has_question: any = data.question_id //return { que_1: 0, que_2: 0, que_3: 0}
+
+
+
+
+パターンを見つけてモジュールにして！

@@ -83,7 +83,7 @@ async function handleEvent(event: line.WebhookEvent): Promise<any> {
 
     //2つ目の質問
     if (que_field.que_2) {
-      //回答をusersテーブルへ
+
       const docRef: any = db.collection('users').doc(getUserId);
       //次の質問を送信する
       const getQuestionId = await getRandomUnaskedQuestion(getUserId);
@@ -327,6 +327,7 @@ async function calculateCosineSimilarity(userId: string) {
 }
 
 
+//観光スポットを出力する関数
 async function createCarouselTemplate(spot_obj: any) {
 
   const spotName: string[] = spot_obj.map((item: { id: string; cosineSimilarity: number }) => item.id);
