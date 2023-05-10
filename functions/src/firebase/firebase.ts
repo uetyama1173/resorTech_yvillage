@@ -28,7 +28,8 @@ export class UserRepository {
   }
 
   //Userの回答を取得する
-  async getUserdata(): Promise<any> {
+  //@return { ans_1: 0, ans_2: 0, ans_3: 0}
+  async getUserAnsdata(): Promise<any> {
     // Firestoreからuserの回答を取得するロジック
     const docRef = await firestore.collection("users").doc(this.userId).get();
     const HasUserData = docRef.data();
@@ -63,6 +64,24 @@ export class UserRepository {
     });
     return result;
   }
+
+
+  //観光情報を取得する
+  async getSpotData() {
+    const querySnapshot = await firestore.collection("spots").get();
+    let spot_param: any = [];
+    querySnapshot.forEach((doc) => {
+      const param = doc.data().param;
+      spot_param.push({
+        id: doc.id,
+        ans1: param.ans1,
+        ans2: param.ans2,
+        ans3: param.ans3,
+      });
+    });
+    return spot_param;
+  }
+
 }
 
 // //テスト用
