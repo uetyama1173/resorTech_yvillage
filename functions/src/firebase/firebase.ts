@@ -1,26 +1,33 @@
 import * as admin from "firebase-admin";
 import * as serviceAccount from "../serviceAccountKey.json";
 
-//インターフェース
+// 計算結果
 interface spotDataCalOutput {
   id: string;
   cosineSimilarity: number;
 }
 
+// 観光地を出力する
 interface SpotDataJSON {
   id: string;
   img_url: string;
   outline: string;
 }
 
-//認証
+// Userの持つ回答情報
+interface HasUserData {
+  answer: Record<string, number>;
+  question_id: Record<string, number>;
+}
+
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
   projectId: serviceAccount.project_id,
 });
 const firestore = admin.firestore();
 
-// ユーザーの回答を管理するクラス
+
 export class UserRepository {
   private userId: string;
 
@@ -28,7 +35,7 @@ export class UserRepository {
     this.userId = userId;
   }
 
-  //Userの回答を初期化する
+
   async initializeUser() {
     await firestore
       .collection("users")
@@ -39,12 +46,14 @@ export class UserRepository {
       });
   }
 
-  //Userの回答を取得する
-  //@return { ans_1: 0, ans_2: 0, ans_3: 0}
-  async getUserAnsdata(): Promise<any> {
+  /**
+   * ユーザの回答を取得する
+   * @returns {Promise<HasUserData>} - ユーザの回答 
+   */
+  async getUserAnsdata(): Promise<HasUserData> {
     // Firestoreからuserの回答を取得するロジック
     const docRef = await firestore.collection("users").doc(this.userId).get();
-    const HasUserData = docRef.data();
+    const HasUserData:any  = docRef.data(); //TODO: anyをなくしたい
     return HasUserData;
   }
 
@@ -59,9 +68,14 @@ export class UserRepository {
     await docRef.update({ [`${propertyName}.${subPropertyName}`]: newValue });
   }
 
+  /**
+   * 質問番号に応じて，質問内容と質問項目を取得する関数
+   * @param {number} question_id - 質問番号
+   * @returns {Promise<HasUserData>} - ユーザの回答
+   */
   //質問番号に応じて，質問内容と質問項目を取得する関数 //returnはオブジェクト
   //{question: '年齢はいくつですか？', answerQueries: { '1': '20代', '2': '30~40代', '3': '50~60代', '4': '60代以上' }}
-  async getQuestionData(question_id: string) {
+  async getQuestionData(question_id: number) {
     let result = {};
     const querySnapshot = await firestore
       .collection("questions")
@@ -71,7 +85,7 @@ export class UserRepository {
       const answerQueries = doc.data().answers;
       result = {
         question: doc.id,
-        answerQueries,
+        answerQueries, 
       };
     });
     return result;
