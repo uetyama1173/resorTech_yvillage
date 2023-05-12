@@ -328,6 +328,7 @@ async function calculateCosineSimilarity(userId: string) {
 
 
 //観光スポットを出力する関数
+//cos類似度の計算結果(obj)を引数として指定
 async function createCarouselTemplate(spot_obj: any) {
 
   const spotName: string[] = spot_obj.map((item: { id: string; cosineSimilarity: number }) => item.id);

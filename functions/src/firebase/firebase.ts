@@ -1,6 +1,18 @@
 import * as admin from "firebase-admin";
 import * as serviceAccount from "../serviceAccountKey.json";
 
+//インターフェース
+interface spotDataCalOutput {
+  id: string;
+  cosineSimilarity: number;
+}
+
+interface SpotDataJSON {
+  id: string;
+  img_url: string;
+  outline: string;
+}
+
 //認証
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
@@ -65,8 +77,23 @@ export class UserRepository {
     return result;
   }
 
+  //観光情報を取得する(計算用)
+  async getSpotDataCal() {
+    const querySnapshot = await firestore.collection("spots").get();
+    let spot_param: any = [];
+    querySnapshot.forEach((doc) => {
+      const param = doc.data().param;
+      spot_param.push({
+        id: doc.id,
+        ans1: param.ans1,
+        ans2: param.ans2,
+        ans3: param.ans3,
+      });
+    });
+    return spot_param;
+  }
 
-  //観光情報を取得する
+  //IDと一致した観光情報を取得する(表示用)
   async getSpotData() {
     const querySnapshot = await firestore.collection("spots").get();
     let spot_param: any = [];
@@ -82,6 +109,31 @@ export class UserRepository {
     return spot_param;
   }
 
+  //id情報から観光情報を取得する関数
+  //@param [
+  //{ id: '国営越後丘稜公園', cosineSimilarity: 0.9958705948858224 },
+  //{ id: '寺泊', cosineSimilarity: 0.9914601339836675 },
+  //{ id: '長岡花火館', cosineSimilarity: 0.7637626158259734 }]
+  async getSpotDataById(cosineSimilarityResult: spotDataCalOutput[]) {
+    let results: SpotDataJSON[] = [];
+    for (let spot of cosineSimilarityResult) {
+      const docRef = firestore.collection("spots").doc(spot.id);
+      const doc = await docRef.get();
+      if (doc.exists) {
+        const data = doc.data();
+        if (data) {
+          results.push({
+            id: spot.id,
+            img_url: data.img_url,
+            outline: data.outline,
+          });
+        }
+      } else {
+        console.log(`No document found for id: ${spot.id}`);
+      }
+    }
+    return results;
+  }
 }
 
 // //テスト用
@@ -90,10 +142,13 @@ export class UserRepository {
 //   const instance_John = new UserRepository("John");
 //   //回答値を取得する
 //   // let UserObj = await instance_John.getUserdata();
+//   let cosineSimilarityResult = [
+//     { id: "国営越後丘稜公園", cosineSimilarity: 0.9958705948858224 },
+//     { id: "寺泊", cosineSimilarity: 0.9914601339836675 },
+//     { id: "長岡花火館", cosineSimilarity: 0.7637626158259734 },
+//   ];
 
-//   //質問プロパティの que_1 を更新する
-//   const new_que_1_value = 1;
-//   await instance_John.updateUserdata("question_id", "que_1", new_que_1_value);
+//   console.log(await instance_John.getSpotDataById(cosineSimilarityResult));
 // }
 // //# sourceMappingURL=firebase.js.map
 
