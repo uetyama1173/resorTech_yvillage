@@ -30,7 +30,7 @@ interface spotDataJSON {
 /**
  * 質問文を作成する関数
  * @param {QuestionContent} question_content 質問内容
- * @return {Object} question JSON形式の質問文
+ * @returns {Object} question JSON形式の質問文
  */
 const QuestionJSON = (questionContent: QuestionContent) => {
   const contentKey = Object.keys(questionContent.answerQueries);
@@ -109,7 +109,7 @@ const QuestionJSON = (questionContent: QuestionContent) => {
 /**
  * ユーザーに出題していない質問IDを取得する関数
  * @param userHasAnswer ユーザーが回答した質問ID (firedatastoreクラスの async getUserdata()で取得した値)
- * @return Number 指定されていない質問ID
+ * @returns Number 指定されていない質問ID
  */
 async function getRandomUnaskedQuestion(userHasAnswer: any) {
   const min = 1; // ここは変えない
@@ -128,7 +128,7 @@ async function getRandomUnaskedQuestion(userHasAnswer: any) {
  * @param spotData firedatastoreクラスの async getSpotDataCal()で取得した値
  * @param userHasAnswer  firedatastoreクラスの async getUserAnsdata()で取得した値
  * @param userHasAnswer ユーザーが回答した質問ID
- * @return sortedCosineSimilarities オブジェクト { id: '国営越後丘稜公園', cosineSimilarity: 0.9958705948858224 },
+ * @returns sortedCosineSimilarities オブジェクト { id: '国営越後丘稜公園', cosineSimilarity: 0.9958705948858224 },
  */
 async function calculateCosineSimilarity(
   spotData: spotDataCalInput[],
@@ -171,6 +171,7 @@ async function calculateCosineSimilarity(
  * @param {string} spots[].id - 観光地の名前
  * @param {string} spots[].img_url - その場所の画像のURL
  * @param {string} spots[].outline - その場所の簡単な説明
+ * @returns {Object} - LINEのカルーセルテンプレート
  */
 async function createCarouselTemplate(cosineSimilarityResult: spotDataJSON[]) {
   const columns = cosineSimilarityResult.map((spot) => {

@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import * as serviceAccount from "../serviceAccountKey.json";
+import * as serviceAccount from "../../serviceAccountKey.json";
 
 // 計算結果
 interface spotDataCalOutput {
