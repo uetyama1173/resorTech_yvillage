@@ -1,37 +1,10 @@
 import * as admin from "firebase-admin";
 import * as serviceAccount from "../serviceAccountKey.json";
-
-// 計算結果
-interface spotDataCalOutput {
-  id: string;
-  cosineSimilarity: number;
-}
-
-// 観光地を出力する
-interface SpotDataJSON {
-  id: string;
-  img_url: string;
-  outline: string;
-}
-
-// 質問文
-interface QuestionData {
-  question: string;
-  answerQueries: {
-    1: string;
-    2: string;
-    3: string;
-    4: string;
-  };
-}
-
-// // Userの持つ回答情報
-// interface HasUserData {
-//   answer: Record<string, number>;
-//   question_id: Record<string, number>;
-// }
-
-
+import {
+  spotDataCalOutput,
+  SpotDataJSON,
+  QuestionData,
+} from "../types/firebase-types";
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
@@ -60,7 +33,7 @@ export class UserRepository {
    * ユーザの回答を取得する
    * @returns {any} - ユーザの回答
    */
-  async getUserAnsdata():Promise<any> {
+  async getUserAnsdata(): Promise<any> {
     // Firestoreからuserの回答を取得するロジック
     const docRef = await firestore.collection("users").doc(this.userId).get();
     const HasUserData: any = docRef.data(); //TODO: anyをなくしたい
@@ -84,7 +57,10 @@ export class UserRepository {
    * @example {question: '年齢はいくつですか？', answerQueries: { '1': '20代', '2': '30~40代', '3': '50~60代', '4': '60代以上' }}
    */
   async getQuestionData(question_id: number): Promise<QuestionData> {
-    let result: QuestionData = { question: '', answerQueries: {1: '', 2: '', 3: '', 4: ''} };
+    let result: QuestionData = {
+      question: "",
+      answerQueries: { 1: "", 2: "", 3: "", 4: "" },
+    };
     const querySnapshot = await firestore
       .collection("questions")
       .where("question_id", "==", question_id)
@@ -117,7 +93,6 @@ export class UserRepository {
     });
     return spot_param;
   }
-
 
   /**
    * cos類似度の結果から，観光地情報を取得する
@@ -184,4 +159,3 @@ export class UserRepository {
 // }
 
 // test();
-

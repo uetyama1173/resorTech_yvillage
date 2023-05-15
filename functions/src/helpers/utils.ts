@@ -1,49 +1,17 @@
-interface QuestionContent {
-  question: string;
-  answerQueries: { [key: string]: string };
-}
-
-interface userHasAnswer {
-  ans_1: number;
-  ans_2: number;
-  ans_3: number;
-}
-
-interface spotDataCalInput {
-  id: string;
-  ans_1: number;
-  ans_2: number;
-  ans_3: number;
-}
-
-interface spotDataCalOutput {
-  id: string;
-  cosineSimilarity: number;
-}
-
-interface spotDataJSON {
-  id: string;
-  outline: string;
-  img_url: string;
-}
-
-interface FlexMessage {
-  type: 'flex';
-  altText: string;
-  contents: {
-    type: string;
-    body: { type: string; layout: string; contents: any[]; };
-    footer: { type: string; layout: string; spacing: string; contents: any[]; flex: number; };
-  };
-}
-
+import {
+  QuestionContent,
+  userHasAnswer,
+  spotDataCalInput,
+  spotDataCalOutput,
+  spotDataJSON,
+} from "../types/helpers-types";
 
 /**
  * 質問文を作成する関数
  * @param {QuestionContent} question_content 質問内容
  * @returns {Object} question JSON形式の質問文
  */
-export const QuestionJSON= (questionContent: QuestionContent) => {
+export const QuestionJSON = (questionContent: QuestionContent) => {
   const contentKey = Object.keys(questionContent.answerQueries);
   const question = {
     type: "flex",
@@ -145,7 +113,6 @@ export async function calculateCosineSimilarity(
   spotData: spotDataCalInput[],
   userHasAnswer: userHasAnswer
 ): Promise<spotDataCalOutput[]> {
-  
   //cos類似度計算
   const cosineSimilarities = spotData.map((spot: any) => {
     const dotProduct =
@@ -184,7 +151,9 @@ export async function calculateCosineSimilarity(
  * @param {string} spots[].outline - その場所の簡単な説明
  * @returns {Object} - LINEのカルーセルテンプレート
  */
-export async function createCarouselTemplate(cosineSimilarityResult: spotDataJSON[]) {
+export async function createCarouselTemplate(
+  cosineSimilarityResult: spotDataJSON[]
+) {
   const columns = cosineSimilarityResult.map((spot) => {
     console.log("観光地名", spot.id);
     return {

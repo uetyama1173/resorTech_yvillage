@@ -2,8 +2,9 @@ import * as functions from "firebase-functions";
 import * as line from "@line/bot-sdk";
 // import * as admin from "firebase-admin";
 import express from "express";
-import { UserRepository } from "./firebase/firebase"; //安全性を意識　exportで個別に指定を行っている
-import { getRandomUnaskedQuestion, QuestionJSON } from "./helpers/utils"; // LINE初期化
+
+import { UserRepository } from "./firebase/firebase"; //　データクラス
+import { getRandomUnaskedQuestion, QuestionJSON } from "./helpers/utils";
 
 // LINE初期化
 const configJson = require("../credentials.json");
