@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import * as serviceAccount from "../../serviceAccountKey.json";
+import * as serviceAccount from "../serviceAccountKey.json";
 
 // 計算結果
 interface spotDataCalOutput {
@@ -14,12 +14,6 @@ interface SpotDataJSON {
   outline: string;
 }
 
-// // Userの持つ回答情報
-// interface HasUserData {
-//   answer: Record<string, number>;
-//   question_id: Record<string, number>;
-// }
-
 // 質問文
 interface QuestionData {
   question: string;
@@ -30,6 +24,13 @@ interface QuestionData {
     4: string;
   };
 }
+
+// // Userの持つ回答情報
+// interface HasUserData {
+//   answer: Record<string, number>;
+//   question_id: Record<string, number>;
+// }
+
 
 
 admin.initializeApp({
@@ -59,7 +60,7 @@ export class UserRepository {
    * ユーザの回答を取得する
    * @returns {any} - ユーザの回答
    */
-  async getUserAnsdata() {
+  async getUserAnsdata():Promise<any> {
     // Firestoreからuserの回答を取得するロジック
     const docRef = await firestore.collection("users").doc(this.userId).get();
     const HasUserData: any = docRef.data(); //TODO: anyをなくしたい
@@ -145,37 +146,41 @@ export class UserRepository {
   }
 }
 
-// //テスト用
+//テスト用
 // async function test() {
 //   // インスタンス生成
 //   const instance_John = new UserRepository("John");
 
-//   // initializeUser() のテスト
-//   await instance_John.initializeUser();
-//   let initialData = await instance_John.getUserAnsdata();
-//   console.log(initialData);  // ここで初期化の結果を確認
+//   // // initializeUser() のテスト
+//   // await instance_John.initializeUser();
+//   // let initialData = await instance_John.getUserAnsdata();
+//   // console.log(initialData);  // ここで初期化の結果を確認
 
-//   // updateUserdata() のテスト
-//   await instance_John.updateUserdata("answer", "ans_1", 1);
-//   let updatedData = await instance_John.getUserAnsdata();
-//   console.log(updatedData);  // ここで更新の結果を確認
+//   // // updateUserdata() のテスト
+//   // await instance_John.updateUserdata("answer", "ans_1", 1);
+//   // let updatedData = await instance_John.getUserAnsdata();
+//   // console.log(updatedData);  // ここで更新の結果を確認
 
-//   // getQuestionData() のテスト
-//   let questionData = await instance_John.getQuestionData(1);
-//   console.log(questionData);  // ここで質問データの取得結果を確認
+//   //Userの回答情報を取得する
+//   let userData = await instance_John.getUserAnsdata();
+//   console.log(userData);  // ここでユーザの回答情報を確認
 
-//   // getSpotDataCal() のテスト
-//   let spotData = await instance_John.getSpotDataCal();
-//   console.log(spotData);  // ここで観光地情報の取得結果を確認
+//   // // getQuestionData() のテスト
+//   // let questionData = await instance_John.getQuestionData(1);
+//   // console.log(questionData);  // ここで質問データの取得結果を確認
 
-//   // getSpotDataById() のテスト
-//   let cosineSimilarityResult = [
-//     { id: "国営越後丘稜公園", cosineSimilarity: 0.9958705948858224 },
-//     { id: "寺泊", cosineSimilarity: 0.9914601339836675 },
-//     { id: "長岡花火館", cosineSimilarity: 0.7637626158259734 },
-//   ];
-//   let spotDataById = await instance_John.getSpotDataById(cosineSimilarityResult);
-//   console.log(spotDataById);  // ここで観光地情報の取得結果を確認
+//   // // getSpotDataCal() のテスト
+//   // let spotData = await instance_John.getSpotDataCal();
+//   // console.log(spotData);  // ここで観光地情報の取得結果を確認
+
+//   // // getSpotDataById() のテスト
+//   // let cosineSimilarityResult = [
+//   //   { id: "国営越後丘稜公園", cosineSimilarity: 0.9958705948858224 },
+//   //   { id: "寺泊", cosineSimilarity: 0.9914601339836675 },
+//   //   { id: "長岡花火館", cosineSimilarity: 0.7637626158259734 },
+//   // ];
+//   // let spotDataById = await instance_John.getSpotDataById(cosineSimilarityResult);
+//   // console.log(spotDataById);  // ここで観光地情報の取得結果を確認
 // }
 
 // test();

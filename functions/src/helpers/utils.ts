@@ -27,12 +27,23 @@ interface spotDataJSON {
   img_url: string;
 }
 
+interface FlexMessage {
+  type: 'flex';
+  altText: string;
+  contents: {
+    type: string;
+    body: { type: string; layout: string; contents: any[]; };
+    footer: { type: string; layout: string; spacing: string; contents: any[]; flex: number; };
+  };
+}
+
+
 /**
  * 質問文を作成する関数
  * @param {QuestionContent} question_content 質問内容
  * @returns {Object} question JSON形式の質問文
  */
-const QuestionJSON = (questionContent: QuestionContent) => {
+export const QuestionJSON= (questionContent: QuestionContent) => {
   const contentKey = Object.keys(questionContent.answerQueries);
   const question = {
     type: "flex",
@@ -111,7 +122,7 @@ const QuestionJSON = (questionContent: QuestionContent) => {
  * @param userHasAnswer ユーザーが回答した質問ID (firedatastoreクラスの async getUserdata()で取得した値)
  * @returns Number 指定されていない質問ID
  */
-async function getRandomUnaskedQuestion(userHasAnswer: any) {
+export async function getRandomUnaskedQuestion(userHasAnswer: any) {
   const min = 1; // ここは変えない
   const max = 3; // 注: 質問数によって変える
   const excluded = Object.values(userHasAnswer).map(Number);
@@ -130,7 +141,7 @@ async function getRandomUnaskedQuestion(userHasAnswer: any) {
  * @param userHasAnswer ユーザーが回答した質問ID
  * @returns sortedCosineSimilarities オブジェクト { id: '国営越後丘稜公園', cosineSimilarity: 0.9958705948858224 },
  */
-async function calculateCosineSimilarity(
+export async function calculateCosineSimilarity(
   spotData: spotDataCalInput[],
   userHasAnswer: userHasAnswer
 ): Promise<spotDataCalOutput[]> {
@@ -173,7 +184,7 @@ async function calculateCosineSimilarity(
  * @param {string} spots[].outline - その場所の簡単な説明
  * @returns {Object} - LINEのカルーセルテンプレート
  */
-async function createCarouselTemplate(cosineSimilarityResult: spotDataJSON[]) {
+export async function createCarouselTemplate(cosineSimilarityResult: spotDataJSON[]) {
   const columns = cosineSimilarityResult.map((spot) => {
     console.log("観光地名", spot.id);
     return {

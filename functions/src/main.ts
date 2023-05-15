@@ -2,6 +2,8 @@ import * as functions from "firebase-functions";
 import * as line from "@line/bot-sdk";
 // import * as admin from "firebase-admin";
 import express from "express";
+import { UserRepository } from "./firebase/firebase"; //安全性を意識　exportで個別に指定を行っている
+import { getRandomUnaskedQuestion, QuestionJSON } from "./helpers/utils"; // LINE初期化
 
 // LINE初期化
 const configJson = require("../credentials.json");
@@ -23,20 +25,32 @@ app.post("/", line.middleware(config), (req, res) => {
 });
 
 // イベント処理
-async function handleEvent(event: line.WebhookEvent): Promise<any> {
+async function handleEvent(event: any): Promise<any> {
+  // DB接続
+  const firestore = new UserRepository(event.source.userId);
+
   if (
     event.type === "message" &&
     event.message.type === "text" &&
     event.message.text === "観光スポットを見つける"
   ) {
-    // const getUserId: string | undefined = event.source.userId;
     const replyToken: string = event.replyToken;
 
-    // 応答メッセージを送信します
-    await client.replyMessage(replyToken, {
-      type: "text",
-      text: "テスト",
-    });
+    // Userの回答情報を初期化する
+    await firestore.initializeUser();
+
+    // Userの回答情報を取得する
+    const HasUserAnsData = await firestore.getUserAnsdata();
+    const question_Id = await getRandomUnaskedQuestion(
+      HasUserAnsData.question_id
+    );
+
+    // 質問文を生成する
+    const questionData = await firestore.getQuestionData(question_Id);
+    const questionMeessage: any = QuestionJSON(questionData); //TODO: anyをなくす
+
+    // 応答メッセージを送信する
+    await client.replyMessage(replyToken, questionMeessage);
   }
 }
 
