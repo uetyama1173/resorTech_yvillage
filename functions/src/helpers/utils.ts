@@ -106,7 +106,6 @@ export async function getRandomUnaskedQuestion(userHasAnswer: any) {
  * @param  ex: { ans_1: 0, ans_2: 0, ans_3: 0 }
  * @param spotData firedatastoreクラスの async getSpotDataCal()で取得した値
  * @param userHasAnswer  firedatastoreクラスの async getUserAnsdata()で取得した値
- * @param userHasAnswer ユーザーが回答した質問ID
  * @returns sortedCosineSimilarities オブジェクト { id: '国営越後丘稜公園', cosineSimilarity: 0.9958705948858224 },
  */
 export async function calculateCosineSimilarity(
@@ -155,7 +154,7 @@ export async function createCarouselTemplate(
   cosineSimilarityResult: spotDataJSON[]
 ) {
   const columns = cosineSimilarityResult.map((spot) => {
-    console.log("観光地名", spot.id);
+    // console.log("観光地名", spot.id);
     return {
       thumbnailImageUrl: spot.img_url,
       title: spot.id,

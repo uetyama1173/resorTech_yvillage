@@ -86,9 +86,9 @@ export class UserRepository {
       const param = doc.data().param;
       spot_param.push({
         id: doc.id,
-        ans1: param.ans1,
-        ans2: param.ans2,
-        ans3: param.ans3,
+        ans1: param.ans_1,
+        ans2: param.ans_2,
+        ans3: param.ans_3,
       });
     });
     return spot_param;
