@@ -1,16 +1,17 @@
-## 　追加
-  tsconfig.json
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
+# application
 
-## タスク
+🌳　LINEであなたに最適な観光スポットを届ける　Webアプリ
 
-* 詳細ページ設計
-* Instagram_API 取得
-* 高速化
-* resortech
-https://github.com/uetyama1173/resorTech_yvillage
+## イメージ
 
-## LineBot
+![tae](images/outline.png)
 
-test>ResoTech_Test
+
+## 受賞
+
+- [技育展2022 開発経験1年未満 優秀賞 - サポーターズ](https://talent.supporterz.jp/geekten/2022/exhibition.html#theme10)
+
+
+## QRコード
+
+![tae](images/qr.png)
