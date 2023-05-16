@@ -1,8 +1,6 @@
 # application
 
-🌳　LINEであなたに最適な観光スポットを届ける　Webアプリ
-
-## イメージ
+🌳　LINEであなたに最適な観光スポットを届ける　Webアプリ <br>
 
 ![tae](images/outline.png)
 
@@ -14,4 +12,4 @@
 
 ## QRコード
 
-![tae](images/qr.png)
+![tae](images/pop.png)
